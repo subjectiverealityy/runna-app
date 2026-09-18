@@ -2,7 +2,7 @@
 import { Check, AlertCircle, Quote } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { CodeChip } from "@/components/ui/CodeChip";
-import type { Message } from "@/types/mock";
+import type { Message, PriceStatus } from "@/types/mock";
 
 interface Props {
   price: Message;
@@ -17,7 +17,7 @@ interface Props {
   codeError?: boolean;
 }
 
-const statusMeta: Record<string, { label: string; bg: string; fg: string }> = {
+const statusMeta: Record<PriceStatus, { label: string; bg: string; fg: string }> = {
   pending: { label: "Awaiting response", bg: "#FDF1DC", fg: "#C9821A" },
   rejected: { label: "Rejected", bg: "#FBEAE8", fg: "#B8463C" },
   cancelled_runner: { label: "Cancelled by runner", bg: "#FBEAE8", fg: "#B8463C" },

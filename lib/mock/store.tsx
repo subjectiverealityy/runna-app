@@ -140,17 +140,19 @@ export function MockStoreProvider({ children }: { children: React.ReactNode }) {
     setChats((prev) => {
       const next = { ...prev };
       expiring.forEach((c) => {
+        // c came from Object.values(chats), so it's already a real Chat —
+        // use it directly instead of re-indexing next[c.id], which
+        // TypeScript can't know is defined (noUncheckedIndexedAccess).
         next[c.id] = {
-          ...next[c.id],
+          ...c,
           countdownEndsAt: null,
           lockedUntil: Date.now() + LOCK_DURATION_MS,
-          messages: [...next[c.id].messages, blankMessage({ chatId: c.id, type: "system", text: "This chat is locked because there was no response within 5 minutes. It will reopen in 24 hours." })],
+          messages: [...c.messages, blankMessage({ chatId: c.id, type: "system", text: "This chat is locked because there was no response within 5 minutes. It will reopen in 24 hours." })],
         };
       });
       unlocking.forEach((c) => {
-        const cur = next[c.id];
-        if (cur.lockedUntil && now >= cur.lockedUntil) {
-          next[c.id] = { ...cur, lockedUntil: null, messages: [...cur.messages, blankMessage({ chatId: c.id, type: "system", text: "This chat has reopened." })] };
+        if (c.lockedUntil && now >= c.lockedUntil) {
+          next[c.id] = { ...c, lockedUntil: null, messages: [...c.messages, blankMessage({ chatId: c.id, type: "system", text: "This chat has reopened." })] };
         }
       });
       return next;
@@ -281,6 +283,7 @@ export function MockStoreProvider({ children }: { children: React.ReactNode }) {
 
     setChats((prev) => {
       const c = prev[chatId];
+      if (!c) return prev; // defensive — chatId is always valid by the time these run, but this keeps the type honest
       let messages: Message[];
       if (isEditingOpen && currentRequest) {
         messages = c.messages.map((m) => (m.id === currentRequest.id ? { ...m, ...fields, note: fields.note ?? "" } : m));
@@ -297,6 +300,7 @@ export function MockStoreProvider({ children }: { children: React.ReactNode }) {
     const runnerName = currentPerson?.name ?? "The runner";
     setChats((prev) => {
       const c = prev[chatId];
+      if (!c) return prev; // defensive — chatId is always valid by the time these run, but this keeps the type honest
       return { ...prev, [chatId]: { ...c, countdownEndsAt: null, messages: [...c.messages, blankMessage({ chatId, type: "system", text: `${runnerName} can't fulfil this request.` })] } };
     });
   };
@@ -314,6 +318,7 @@ export function MockStoreProvider({ children }: { children: React.ReactNode }) {
     if (!chat || !currentRequest || currentRequest.requestStatus !== "open") return;
     setChats((prev) => {
       const c = prev[chatId];
+      if (!c) return prev; // defensive — chatId is always valid by the time these run, but this keeps the type honest
       const priceCard = blankMessage({ chatId, type: "price", sender: "runner", requestId: currentRequest.id, price, items: currentRequest.items, note: currentRequest.note, priceStatus: "pending" });
       const messages = c.messages.map((m) => (m.id === currentRequest.id ? { ...m, requestStatus: "locked" as const } : m));
       return { ...prev, [chatId]: { ...c, countdownEndsAt: null, messages: [...messages, priceCard] } };
@@ -346,7 +351,8 @@ export function MockStoreProvider({ children }: { children: React.ReactNode }) {
     }
     setChats((prev) => {
       const c = prev[chatId];
-      const messages = c.messages.map((m) => (m.id === priceId ? { ...m, priceStatus: "confirmed" as const, confirmedAt: Date.now(), fulfilmentCode, paidVia: (useWallet ? "wallet" : "direct") as const } : m));
+      if (!c) return prev; // defensive — chatId is always valid by the time these run, but this keeps the type honest
+      const messages = c.messages.map((m) => (m.id === priceId ? { ...m, priceStatus: "confirmed" as const, confirmedAt: Date.now(), fulfilmentCode, paidVia: (useWallet ? "wallet" : "direct") as "wallet" | "direct" } : m));
       return { ...prev, [chatId]: { ...c, messages } };
     });
   };
@@ -356,6 +362,7 @@ export function MockStoreProvider({ children }: { children: React.ReactNode }) {
   const rejectPrice: Store["rejectPrice"] = (chatId, priceId) => {
     setChats((prev) => {
       const c = prev[chatId];
+      if (!c) return prev; // defensive — chatId is always valid by the time these run, but this keeps the type honest
       const priceCard = c.messages.find((m) => m.id === priceId);
       const messages = c.messages.map((m) => {
         if (m.id === priceId) return { ...m, priceStatus: "rejected" as const };
@@ -371,6 +378,7 @@ export function MockStoreProvider({ children }: { children: React.ReactNode }) {
   const cancelPrice: Store["cancelPrice"] = (chatId, priceId) => {
     setChats((prev) => {
       const c = prev[chatId];
+      if (!c) return prev; // defensive — chatId is always valid by the time these run, but this keeps the type honest
       const priceCard = c.messages.find((m) => m.id === priceId);
       const messages = c.messages.map((m) => {
         if (m.id === priceId) return { ...m, priceStatus: "cancelled_runner" as const };
@@ -393,6 +401,7 @@ export function MockStoreProvider({ children }: { children: React.ReactNode }) {
     const matched = code.trim() === priceCard.fulfilmentCode;
     setChats((prev) => {
       const c = prev[chatId];
+      if (!c) return prev; // defensive — chatId is always valid by the time these run, but this keeps the type honest
       const messages = c.messages.map((m) => (m.id === priceId ? { ...m, codeEnteredByRunner: code.trim(), priceStatus: matched ? ("fulfilled" as const) : m.priceStatus } : m));
       return { ...prev, [chatId]: { ...c, messages: matched ? [...messages, blankMessage({ chatId, type: "system", text: "Order fulfilled — code confirmed on delivery." })] : messages } };
     });
@@ -415,6 +424,7 @@ export function MockStoreProvider({ children }: { children: React.ReactNode }) {
     const sender = currentPerson.type === "runner" ? "runner" : "orderer";
     setChats((prev) => {
       const c = prev[chatId];
+      if (!c) return prev; // defensive — chatId is always valid by the time these run, but this keeps the type honest
       return {
         ...prev,
         [chatId]: {
@@ -525,7 +535,11 @@ export function MockStoreProvider({ children }: { children: React.ReactNode }) {
   };
 
   const markAdminChatRead: Store["markAdminChatRead"] = (adminChatId, by) => {
-    setAdminChats((prev) => ({ ...prev, [adminChatId]: { ...prev[adminChatId], [by === "user" ? "unreadForUser" : "unreadForAdmin"]: 0 } }));
+    setAdminChats((prev) => {
+      const c = prev[adminChatId];
+      if (!c) return prev;
+      return { ...prev, [adminChatId]: { ...c, [by === "user" ? "unreadForUser" : "unreadForAdmin"]: 0 } };
+    });
   };
 
   // ── admin: campus/vendor/destination CRUD ───────────────────────

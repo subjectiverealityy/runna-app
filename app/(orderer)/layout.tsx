@@ -9,7 +9,7 @@ export default function OrdererLayout({ children }: { children: React.ReactNode 
   const { currentPerson } = useMockStore();
   const pathname = usePathname();
   const router = useRouter();
-  const inChat = /\/messages\/[^/]+$/.test(pathname) || pathname === "/messages/support" || pathname === "/messages/new";
+  const inChat = /\/orderer-messages\/[^/]+$/.test(pathname) || pathname === "/orderer-messages/support";
 
   useEffect(() => {
     if (!currentPerson || currentPerson.type !== "orderer") router.replace("/sign-in");
@@ -24,7 +24,7 @@ export default function OrdererLayout({ children }: { children: React.ReactNode 
         <BottomTabs
           tabs={[
             { href: "/search", label: "Runners", icon: Search },
-            { href: "/messages", label: "Messages", icon: MessageCircle },
+            { href: "/orderer-messages", label: "Messages", icon: MessageCircle },
           ]}
         />
       )}

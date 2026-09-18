@@ -20,7 +20,7 @@ export default function RunnerMessagesPage() {
   return (
     <div className="px-4 py-4 space-y-2 overflow-y-auto h-full">
       {supportChat && (
-        <a href="/messages/support" className="w-full text-left rounded-xl p-3.5 border-2 border-amber bg-amber/10 flex items-center gap-2.5">
+        <a href="/runner-messages/support" className="w-full text-left rounded-xl p-3.5 border-2 border-amber bg-amber/10 flex items-center gap-2.5">
           <ShieldCheck size={18} className="text-amberDeep flex-shrink-0" />
           <p className="text-sm font-semibold text-navy flex-1">Runna Support</p>
           {supportChat.unreadForUser > 0 && <span className="rounded-full text-[10px] font-bold px-1.5 py-0.5 bg-red text-white">{supportChat.unreadForUser}</span>}
@@ -28,7 +28,7 @@ export default function RunnerMessagesPage() {
       )}
       {myChats.length === 0 && !supportChat && <p className="text-xs text-center pt-10 text-faint">No conversations yet.</p>}
       {myChats.map((c) => (
-        <a key={c.id} href={`/messages/${c.id}`} className="w-full text-left rounded-xl p-3.5 border border-line bg-card flex items-center justify-between block">
+        <a key={c.id} href={`/runner-messages/${c.id}`} className="w-full text-left rounded-xl p-3.5 border border-line bg-card flex items-center justify-between block">
           <div className="min-w-0">
             <p className="text-sm font-semibold text-navy">
               {c.orderer?.name} <span className="font-mono text-xs font-normal text-faint">#{c.orderer?.code}</span>

@@ -9,7 +9,7 @@ export default function RunnerLayout({ children }: { children: React.ReactNode }
   const { currentPerson } = useMockStore();
   const pathname = usePathname();
   const router = useRouter();
-  const inChat = /\/messages\/[^/]+$/.test(pathname) || pathname === "/messages/support";
+  const inChat = /\/runner-messages\/[^/]+$/.test(pathname) || pathname === "/runner-messages/support";
 
   useEffect(() => {
     if (!currentPerson || currentPerson.type !== "runner") router.replace("/sign-in");
@@ -24,7 +24,7 @@ export default function RunnerLayout({ children }: { children: React.ReactNode }
         <BottomTabs
           tabs={[
             { href: "/orders", label: "Orders", icon: Package },
-            { href: "/messages", label: "Messages", icon: MessageCircle },
+            { href: "/runner-messages", label: "Messages", icon: MessageCircle },
           ]}
         />
       )}
