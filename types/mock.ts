@@ -12,8 +12,8 @@ export type PriceStatus = "pending" | "confirmed" | "rejected" | "cancelled_runn
 export type PaidVia = "wallet" | "direct";
 export type ReportStatus = "open" | "dismissed" | "actioned";
 export type FeedbackStatus = "new" | "reviewed";
-export type FulfilmentType = "delivery-room" | "delivery-front" | "pickup";
-export type DeliverTo = "room" | "front";
+export type FulfilmentType = "delivery-room" | "delivery-entrance" | "pickup";
+export type DeliverTo = "room" | "entrance";
 
 export interface Campus {
   id: string;

@@ -32,8 +32,8 @@ export function RequestModal({ runner, vendors, destinations, seed, isEdit, onCl
 
   const options: { value: FulfilmentType; label: string }[] = [];
   if (runner.canDeliver) {
-    if (runner.deliverTo.includes("room")) options.push({ value: "delivery-room", label: "Delivery to room" });
-    if (runner.deliverTo.includes("front")) options.push({ value: "delivery-front", label: "Delivery to hostel front" });
+    if (runner.deliverTo.includes("room")) options.push({ value: "delivery-room", label: "Delivery to hostel room" });
+    if (runner.deliverTo.includes("entrance")) options.push({ value: "delivery-entrance", label: "Delivery to hostel entrance" });
   }
   if (runner.canPickup) options.push({ value: "pickup", label: "Pickup" });
 

@@ -147,7 +147,7 @@ export function MockStoreProvider({ children }: { children: React.ReactNode }) {
           ...c,
           countdownEndsAt: null,
           lockedUntil: Date.now() + LOCK_DURATION_MS,
-          messages: [...c.messages, blankMessage({ chatId: c.id, type: "system", text: "This chat is locked because there was no response within 5 minutes. It will reopen in 24 hours." })],
+          messages: [...c.messages, blankMessage({ chatId: c.id, type: "system", text: "This chat is locked because there was no response from the runner within 5 minutes" })],
         };
       });
       unlocking.forEach((c) => {

@@ -1,8 +1,8 @@
 import type { FulfilmentType } from "@/types/mock";
 
 export function fulfilmentLabel(type: FulfilmentType | null) {
-  if (type === "delivery-room") return "Delivery to room";
-  if (type === "delivery-front") return "Delivery to hostel front";
+  if (type === "delivery-room") return "Delivery to hostel room";
+  if (type === "delivery-entrance") return "Delivery to hostel entrance";
   if (type === "pickup") return "Pickup";
   return "";
 }

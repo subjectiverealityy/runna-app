@@ -199,7 +199,7 @@ export function ChatScreen({ chatId, role }: { chatId: string; role: "runner" | 
       <div className="px-4 pb-5 pt-2 border-t border-line bg-paper flex-shrink-0">
         {chatLocked ? (
           <div className="rounded-xl px-3.5 py-3 text-center bg-redBg">
-            <p className="text-xs font-medium text-red">This chat is locked and will reopen automatically.</p>
+            <p className="text-xs font-medium text-red">This chat is locked and will reopen automatically in 24 hours.</p>
           </div>
         ) : (
           <>

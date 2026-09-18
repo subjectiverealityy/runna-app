@@ -102,8 +102,8 @@ export default function RunnerSettingsPage() {
           <CheckRow label="Delivery" checked={canDeliver} onToggle={() => setCanDeliver(!canDeliver)} />
           {canDeliver && (
             <div className="pl-4 space-y-2">
-              <CheckRow label="To room" checked={deliverTo.includes("room")} onToggle={() => toggleIn(deliverTo, setDeliverTo, "room")} />
-              <CheckRow label="To hostel front" checked={deliverTo.includes("front")} onToggle={() => toggleIn(deliverTo, setDeliverTo, "front")} />
+              <CheckRow label="To hostel room" checked={deliverTo.includes("room")} onToggle={() => toggleIn(deliverTo, setDeliverTo, "room")} />
+              <CheckRow label="To hostel entrance" checked={deliverTo.includes("entrance")} onToggle={() => toggleIn(deliverTo, setDeliverTo, "entrance")} />
             </div>
           )}
           <CheckRow label="Pickup" checked={canPickup} onToggle={() => setCanPickup(!canPickup)} />

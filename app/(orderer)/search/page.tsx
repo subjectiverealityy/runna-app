@@ -28,7 +28,7 @@ export default function SearchPage() {
     if (!type) return true;
     if (type === "pickup") return r.canPickup;
     if (type === "delivery-room") return r.canDeliver && r.deliverTo.includes("room");
-    if (type === "delivery-front") return r.canDeliver && r.deliverTo.includes("front");
+    if (type === "delivery-entrance") return r.canDeliver && r.deliverTo.includes("entrance");
     return true;
   };
 
@@ -43,8 +43,8 @@ export default function SearchPage() {
   };
   const methodsSummary = (r: Person) => {
     const methods: string[] = [];
-    if (r.canDeliver && r.deliverTo.includes("room")) methods.push("Delivery (room)");
-    if (r.canDeliver && r.deliverTo.includes("front")) methods.push("Delivery (hostel front)");
+    if (r.canDeliver && r.deliverTo.includes("room")) methods.push("Delivery (hostel room)");
+    if (r.canDeliver && r.deliverTo.includes("entrance")) methods.push("Delivery (hostel entrance)");
     if (r.canPickup) methods.push("Pickup");
     return methods.join(", ") || "—";
   };
@@ -93,8 +93,8 @@ export default function SearchPage() {
       </div>
       <select value={fulfilmentFilter} onChange={(e) => setFulfilmentFilter(e.target.value as FulfilmentType)} className="w-full rounded-lg px-2.5 py-2 text-xs border border-line bg-card">
         <option value="">Any fulfilment method</option>
-        <option value="delivery-room">Delivery to room</option>
-        <option value="delivery-front">Delivery to hostel front</option>
+        <option value="delivery-room">Delivery to hostel room</option>
+        <option value="delivery-entrance">Delivery to hostel entrance</option>
         <option value="pickup">Pickup</option>
       </select>
 

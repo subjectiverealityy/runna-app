@@ -45,14 +45,14 @@ export const MOCK_RUNNERS: Person[] = [
   runner({
     id: "r1", code: "205671", name: "Kemi Adisa", campusId: "abuad", status: "online",
     vendorIds: ["v1", "v3"], destinationIds: ["d1", "d2"],
-    canDeliver: true, canPickup: true, deliverTo: ["room", "front"],
+    canDeliver: true, canPickup: true, deliverTo: ["room", "entrance"],
     payoutAccount: "Flutterwave — GTB •••• 4471", isBlocked: false,
     selfVendorName: null, selfVendorLocation: null,
   }),
   runner({
     id: "r2", code: "118823", name: "Chidi Okafor", campusId: "abuad", status: "offline",
     vendorIds: ["v4", "v5"], destinationIds: ["d3"],
-    canDeliver: true, canPickup: false, deliverTo: ["front"],
+    canDeliver: true, canPickup: false, deliverTo: ["entrance"],
     payoutAccount: "Flutterwave — Access •••• 2290", isBlocked: false,
     selfVendorName: null, selfVendorLocation: null,
   }),
@@ -73,7 +73,7 @@ export const MOCK_RUNNERS: Person[] = [
   runner({
     id: "r5", code: "902147", name: "Femi Adeyemi", campusId: "abuad", status: "online",
     vendorIds: ["v2", "v6"], destinationIds: ["d2", "d3"],
-    canDeliver: true, canPickup: true, deliverTo: ["front"],
+    canDeliver: true, canPickup: true, deliverTo: ["entrance"],
     payoutAccount: "Flutterwave — GTB •••• 1129", isBlocked: false,
     selfVendorName: "Femi's Grill", selfVendorLocation: "Room B204, Male Hostel 1",
   }),
@@ -152,7 +152,7 @@ export function seedChats(): Record<string, Chat> {
   chats[c3] = { id: c3, runnerId: "r1", ordererId: "o3", unreadForRunner: 0, unreadForOrderer: 0, countdownEndsAt: null, lockedUntil: null, prefill: null, messages: [textMsg(c3, "orderer", "Hi Kemi, are you free to run an order this evening?", now - 26 * hr), textMsg(c3, "runner", "Okay boss, send the details", now - 26 * hr + 2 * min), req3, price3, textMsg(c3, "orderer", "Paid already, see you by 7", now - 25 * hr - 50 * min), systemMsg(c3, "Order fulfilled — code confirmed on delivery.", now - 25 * hr), textMsg(c3, "orderer", "Got it, thank you so much!", now - 25 * hr + 2 * min), textMsg(c3, "runner", "You're welcome, enjoy!", now - 25 * hr + 3 * min)] };
 
   const c5 = "chat_zainab_kemi";
-  const req5 = requestMsg({ chatId: c5, vendorId: "v1", destinationId: "d2", fulfilmentType: "delivery-front", items: "2 sausage rolls and a smoothie", deliveryTime: "17:00", note: "Please leave with the porter if I'm not there", status: "locked", at: now - 5 * hr + 4 * min });
+  const req5 = requestMsg({ chatId: c5, vendorId: "v1", destinationId: "d2", fulfilmentType: "delivery-entrance", items: "2 sausage rolls and a smoothie", deliveryTime: "17:00", note: "Please leave with the porter if I'm not there", status: "locked", at: now - 5 * hr + 4 * min });
   const price5 = priceMsgFn({ chatId: c5, requestId: req5.id, price: 2600, items: req5.items ?? "", note: req5.note ?? "", status: "confirmed", confirmedAt: now - 4 * hr, fulfilmentCode: "7350", at: now - 4 * hr - 5 * min });
   chats[c5] = { id: c5, runnerId: "r1", ordererId: "o5", unreadForRunner: 0, unreadForOrderer: 0, countdownEndsAt: null, lockedUntil: null, prefill: null, messages: [textMsg(c5, "orderer", "Hi, please can I get something from Cafe One?", now - 5 * hr), textMsg(c5, "runner", "Sure! Delivery or pickup?", now - 5 * hr + 2 * min), req5, price5, textMsg(c5, "orderer", "Just paid, thank you!", now - 4 * hr + 1 * min), textMsg(c5, "runner", "Got it, on my way shortly", now - 4 * hr + 2 * min)] };
 
@@ -165,7 +165,7 @@ export function seedChats(): Record<string, Chat> {
   chats[c8] = { id: c8, runnerId: "r1", ordererId: "o6", unreadForRunner: 1, unreadForOrderer: 0, countdownEndsAt: now + 3 * min + 30000, lockedUntil: null, prefill: null, messages: [req8] };
 
   const c6 = "chat_tolu_chidi";
-  const req6 = requestMsg({ chatId: c6, vendorId: "v4", destinationId: "d3", fulfilmentType: "delivery-front", items: "Meat pie and zobo", deliveryTime: "18:00", status: "locked", at: now - 2 * day + 3 * min });
+  const req6 = requestMsg({ chatId: c6, vendorId: "v4", destinationId: "d3", fulfilmentType: "delivery-entrance", items: "Meat pie and zobo", deliveryTime: "18:00", status: "locked", at: now - 2 * day + 3 * min });
   const price6 = priceMsgFn({ chatId: c6, requestId: req6.id, price: 2800, items: req6.items ?? "", note: req6.note ?? "", status: "fulfilled", confirmedAt: now - 2 * day + 6 * min, fulfilmentCode: "3307", codeEnteredByRunner: "3307", at: now - 2 * day + 5 * min });
   chats[c6] = { id: c6, runnerId: "r2", ordererId: "o1", unreadForRunner: 0, unreadForOrderer: 0, countdownEndsAt: null, lockedUntil: null, prefill: null, messages: [textMsg(c6, "orderer", "Hi Chidi, can I get meat pie and zobo from Bites and Eats?", now - 2 * day), textMsg(c6, "runner", "Yes ma, gimme 2 mins to confirm price", now - 2 * day + 2 * min), req6, price6, textMsg(c6, "orderer", "Paid! I'll be at the hostel gate by 6", now - 2 * day + 7 * min), systemMsg(c6, "Order fulfilled — code confirmed on delivery.", now - 2 * day + 8 * min), textMsg(c6, "orderer", "Thanks for being quick as usual", now - 2 * day + 9 * min), textMsg(c6, "runner", "Anytime! Message me whenever", now - 2 * day + 10 * min)] };
 
