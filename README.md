@@ -1,3 +1,5 @@
+Important: Please let's all create our feature/action branches from the dev branch and aim for descriptive commit histories.
+
 # Runna — frontend-only preview
 
 The real application's screens, built against the actual Next.js file
