@@ -13,7 +13,7 @@ import { useMockStore } from "@/lib/mock/store";
 // increment_wallet_balance comment in the backend-wired app). Here
 // top-up is instant and untracked, since there's no real payment provider
 // wired up at all in this build.
-export default function OrdererSettingsPage() {
+export default function CustomerSettingsPage() {
   const { currentPerson, updateRunnerProfile, topUpWallet } = useMockStore();
   const [name, setName] = useState("");
   const [showAddFunds, setShowAddFunds] = useState(false);

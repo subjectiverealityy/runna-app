@@ -9,7 +9,7 @@ interface OrderRow {
   price: any;
   request: any;
   chat: any;
-  orderer: any;
+  customer: any;
 }
 
 async function copyToClipboard(text: string): Promise<boolean> {
@@ -70,7 +70,7 @@ export default function RunnerOrdersPage() {
           price,
           request: chat.messages.find((r) => r.type === "request" && r.id === price.requestId) ?? null,
           chat,
-          orderer: people.find((p) => p.id === chat.ordererId) ?? null,
+          customer: people.find((p) => p.id === chat.customerId) ?? null,
         }))
     )
     .sort((a, b) => {
@@ -122,9 +122,9 @@ export default function RunnerOrdersPage() {
       </div>
 
       <div className="px-4 py-2 space-y-2.5">
-        {orders.length === 0 && <p className="text-xs text-center pt-10 text-faint">Confirmed orders will show up here once an orderer pays.</p>}
+        {orders.length === 0 && <p className="text-xs text-center pt-10 text-faint">Confirmed orders will show up here once an customer pays.</p>}
         {toDeliver.length > 0 && <p className="text-[11px] font-semibold uppercase tracking-wide text-faint px-1">To deliver</p>}
-        {toDeliver.map(({ price, request, chat, orderer }) => (
+        {toDeliver.map(({ price, request, chat, customer }) => (
           <Link key={price.id} href={`/runner-messages/${chat.id}`} className="block rounded-xl p-3.5 border border-line bg-card">
             <div className="flex items-center justify-between mb-1.5">
               <span className="text-sm font-semibold text-navy">{resolveVendorName(request?.vendorId ?? null)}</span>
@@ -140,11 +140,11 @@ export default function RunnerOrdersPage() {
               </p>
             )}
             {price.note && <p className="text-xs mt-1 italic text-sub">"{price.note}"</p>}
-            <p className="text-xs mt-1 text-ink">For {orderer?.name} · code <span className="font-mono">{price.fulfilmentCode}</span></p>
+            <p className="text-xs mt-1 text-ink">For {customer?.name} · code <span className="font-mono">{price.fulfilmentCode}</span></p>
           </Link>
         ))}
         {delivered.length > 0 && <p className="text-[11px] font-semibold uppercase tracking-wide text-faint px-1 pt-2">Delivered</p>}
-        {delivered.map(({ price, request, chat, orderer }) => (
+        {delivered.map(({ price, request, chat, customer }) => (
           <Link key={price.id} href={`/runner-messages/${chat.id}`} className="block rounded-xl p-3.5 border border-line bg-card opacity-70">
             <div className="flex items-center justify-between mb-1.5">
               <span className="text-sm font-semibold text-navy">{resolveVendorName(request?.vendorId ?? null)}</span>
@@ -160,7 +160,7 @@ export default function RunnerOrdersPage() {
               </p>
             )}
             {price.note && <p className="text-xs mt-1 italic text-sub">"{price.note}"</p>}
-            <p className="text-xs mt-1 text-ink">For {orderer?.name} · code <span className="font-mono">{price.fulfilmentCode}</span></p>
+            <p className="text-xs mt-1 text-ink">For {customer?.name} · code <span className="font-mono">{price.fulfilmentCode}</span></p>
           </Link>
         ))}
       </div>

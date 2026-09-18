@@ -1,6 +1,6 @@
 "use client";
 import { SupportChatScreen } from "@/components/chat/SupportChatScreen";
 
-export default function OrdererSupportPage() {
+export default function CustomerSupportPage() {
   return <SupportChatScreen />;
 }

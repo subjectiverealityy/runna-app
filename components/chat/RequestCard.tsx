@@ -8,13 +8,13 @@ interface Props {
   vendorName: string;
   destinationName: string;
   fulfilmentLabel: string;
-  viewer: "runner" | "orderer";
+  viewer: "runner" | "customer";
   chatLocked: boolean;
   onEdit?: () => void;
   onSendPrice?: () => void;
 }
 
-// Orderer-authored, editable until a runner locks it by sending a price.
+// Customer-authored, editable until a runner locks it by sending a price.
 export function RequestCard({ request, vendorName, destinationName, fulfilmentLabel, viewer, chatLocked, onEdit, onSendPrice }: Props) {
   const statusMeta =
     request.requestStatus === "locked"
@@ -54,7 +54,7 @@ export function RequestCard({ request, vendorName, destinationName, fulfilmentLa
         )}
       </div>
 
-      {!chatLocked && request.requestStatus === "open" && viewer === "orderer" && (
+      {!chatLocked && request.requestStatus === "open" && viewer === "customer" && (
         <div className="px-3.5 pb-3">
           <Button tone="ghost" onClick={onEdit}>
             Edit request
@@ -66,7 +66,7 @@ export function RequestCard({ request, vendorName, destinationName, fulfilmentLa
           <Button onClick={onSendPrice}>Send a price</Button>
         </div>
       )}
-      {request.requestStatus === "locked" && viewer === "orderer" && (
+      {request.requestStatus === "locked" && viewer === "customer" && (
         <div className="px-3.5 pb-3">
           <p className="text-[11px] text-faint">Locked to the price card below</p>
         </div>

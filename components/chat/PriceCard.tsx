@@ -6,7 +6,7 @@ import type { Message, PriceStatus } from "@/types/mock";
 
 interface Props {
   price: Message;
-  viewer: "runner" | "orderer";
+  viewer: "runner" | "customer";
   walletBalance: number;
   onAccept?: () => void;
   onReject?: () => void;
@@ -63,7 +63,7 @@ export function PriceCard({ price, viewer, walletBalance, onAccept, onReject, on
         </div>
       )}
 
-      {price.priceStatus === "pending" && viewer === "orderer" && (
+      {price.priceStatus === "pending" && viewer === "customer" && (
         <div className="px-3.5 py-3 space-y-2">
           <Button onClick={onAccept}>{walletBalance >= Number(price.price) ? `Pay ${formatMoney(Number(price.price))} from wallet` : `Pay ${formatMoney(Number(price.price))} to confirm`}</Button>
           <Button tone="ghost" onClick={onReject}>
@@ -79,7 +79,7 @@ export function PriceCard({ price, viewer, walletBalance, onAccept, onReject, on
         </div>
       )}
 
-      {price.priceStatus === "confirmed" && viewer === "orderer" && (
+      {price.priceStatus === "confirmed" && viewer === "customer" && (
         <div className="px-3.5 py-3 space-y-2">
           {price.paidVia === "wallet" && <p className="text-[11px] text-green">Paid from your wallet</p>}
           <div className="rounded-lg px-3 py-2 flex items-center justify-between bg-paper">
@@ -90,7 +90,7 @@ export function PriceCard({ price, viewer, walletBalance, onAccept, onReject, on
       )}
       {price.priceStatus === "confirmed" && viewer === "runner" && (
         <div className="px-3.5 py-3 space-y-2">
-          <span className="text-[11px] text-sub">Ask the orderer to read out their code, then enter it here to confirm handoff</span>
+          <span className="text-[11px] text-sub">Ask the customer to read out their code, then enter it here to confirm handoff</span>
           <div className="flex gap-2">
             <input
               value={codeDraft}
@@ -105,7 +105,7 @@ export function PriceCard({ price, viewer, walletBalance, onAccept, onReject, on
           </div>
           {codeError && (
             <div className="flex items-center gap-1 text-xs text-red">
-              <AlertCircle size={12} /> Code doesn't match — check with the orderer.
+              <AlertCircle size={12} /> Code doesn't match — check with the customer.
             </div>
           )}
         </div>

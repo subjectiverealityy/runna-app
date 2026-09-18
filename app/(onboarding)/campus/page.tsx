@@ -15,7 +15,7 @@ export default function CampusPage() {
   const pick = (campusId: string) => {
     sessionStorage.setItem("onboarding_campus", campusId);
     const role = sessionStorage.getItem("onboarding_role");
-    router.push(role === "runner" ? "/runner-setup" : "/orderer-setup");
+    router.push(role === "runner" ? "/runner-setup" : "/customer-setup");
   };
 
   return (

@@ -18,13 +18,13 @@ import type { Message, FulfilmentType } from "@/types/mock";
 // identical to. The only thing that changes is where the data comes from
 // and where actions go; the UI, the layout, and the interaction logic are
 // meant to carry over directly.
-export function ChatScreen({ chatId, role }: { chatId: string; role: "runner" | "orderer" }) {
+export function ChatScreen({ chatId, role }: { chatId: string; role: "runner" | "customer" }) {
   const router = useRouter();
   const store = useMockStore();
   const { chats, people, currentPerson, vendors: VENDORS, destinations: DESTINATIONS } = store;
   const isRunner = role === "runner";
   const chat = chats[chatId];
-  const other = chat ? people.find((p) => p.id === (isRunner ? chat.ordererId : chat.runnerId)) : null;
+  const other = chat ? people.find((p) => p.id === (isRunner ? chat.customerId : chat.runnerId)) : null;
   const runnerForThisChat = chat ? people.find((p) => p.id === chat.runnerId) : null;
 
   const [text, setText] = useState("");

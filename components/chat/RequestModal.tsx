@@ -24,7 +24,7 @@ interface Props {
 const ON_LOCATION = "on_location";
 
 // Options are built from THIS runner's supported vendors/destinations/
-// fulfilment types — an orderer can never request something the runner
+// fulfilment types — an customer can never request something the runner
 // doesn't actually offer.
 export function RequestModal({ runner, vendors, destinations, seed, isEdit, onClose, onSubmit }: Props) {
   const hasSelfVendor = Boolean(runner.selfVendorName);

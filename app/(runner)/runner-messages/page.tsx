@@ -10,10 +10,10 @@ export default function RunnerMessagesPage() {
   const myChats = Object.values(chats)
     .filter((c) => c.runnerId === currentPerson.id)
     .map((c) => {
-      const orderer = people.find((p) => p.id === c.ordererId) ?? null;
+      const customer = people.find((p) => p.id === c.customerId) ?? null;
       const last = c.messages[c.messages.length - 1];
       const preview = last?.type === "price" ? `Price sent · ₦${last.price}` : last?.type === "request" ? `Request · ${last.items}` : last?.text ?? "";
-      return { ...c, orderer, preview };
+      return { ...c, customer, preview };
     });
 
   const supportChat = Object.values(adminChats).find((c) => c.personId === currentPerson.id);
@@ -32,7 +32,7 @@ export default function RunnerMessagesPage() {
         <Link key={c.id} href={`/runner-messages/${c.id}`} className="w-full text-left rounded-xl p-3.5 border border-line bg-card flex items-center justify-between block">
           <div className="min-w-0">
             <p className="text-sm font-semibold text-navy">
-              {c.orderer?.name} <span className="font-mono text-xs font-normal text-faint">#{c.orderer?.code}</span>
+              {c.customer?.name} <span className="font-mono text-xs font-normal text-faint">#{c.customer?.code}</span>
             </p>
             <p className="text-xs truncate mt-0.5 text-sub">{c.preview}</p>
           </div>

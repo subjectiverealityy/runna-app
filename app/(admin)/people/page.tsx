@@ -30,7 +30,7 @@ export default function PeoplePage() {
         <button onClick={() => setShowBlockedOnly(true)} className={`flex-1 rounded-lg py-2 text-xs font-semibold border border-line ${showBlockedOnly ? "bg-red text-white" : "bg-card text-sub"}`}>Blocked</button>
       </div>
       {!showBlockedOnly && (
-        <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search by code — runner or orderer" className="w-full rounded-xl px-3 py-2.5 text-sm border border-line bg-card font-mono" />
+        <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search by code — runner or customer" className="w-full rounded-xl px-3 py-2.5 text-sm border border-line bg-card font-mono" />
       )}
 
       {(showBlockedOnly || query.trim()) && (

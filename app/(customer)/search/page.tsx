@@ -63,7 +63,7 @@ export default function SearchPage() {
       destinationId: destinationFilter || undefined,
       fulfilmentType: (fulfilmentFilter || undefined) as FulfilmentType | undefined,
     });
-    router.push(`/orderer-messages/${chatId}`);
+    router.push(`/customer-messages/${chatId}`);
   };
 
   return (

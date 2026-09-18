@@ -2,15 +2,15 @@
 import { X, Info } from "lucide-react";
 
 const runnerTips = [
-  "Send a price on an open request to lock it in — the orderer's already set the vendor, items, time and destination.",
+  "Send a price on an open request to lock it in — the customer's already set the vendor, items, time and destination.",
   "Reply within 5 minutes or the whole chat locks for 24 hours, not just that request.",
   "Payment lands in your account (or straight off their wallet) the instant they confirm — no need to front the cost.",
-  "At handoff, get the orderer to read out their code and enter it here — that's what marks the order delivered.",
+  "At handoff, get the customer to read out their code and enter it here — that's what marks the order delivered.",
   "One order at a time per chat — reject or wait for the current one to finish before you can send another price.",
   "Reports can get you blocked, and missing 3 requests in 30 minutes takes you offline automatically.",
 ];
 
-const ordererTips = [
+const customerTips = [
   "Tap + to build a request — pick the vendor, destination, what you want and when — that's what the runner prices.",
   "They'll send back a price. Pay to confirm it, or reject it to ask for something different.",
   "No response in 5 minutes locks the whole chat for 24 hours — nothing's charged, but you'll need to wait it out.",
@@ -19,8 +19,8 @@ const ordererTips = [
   "An offline runner can't be sent a request — message them first to ask when they'll be back.",
 ];
 
-export function InfoModal({ role, onClose }: { role: "runner" | "orderer"; onClose: () => void }) {
-  const tips = role === "runner" ? runnerTips : ordererTips;
+export function InfoModal({ role, onClose }: { role: "runner" | "customer"; onClose: () => void }) {
+  const tips = role === "runner" ? runnerTips : customerTips;
   return (
     <div className="fixed inset-0 z-40 flex items-end justify-center bg-black/40">
       <div className="w-full max-w-md rounded-t-2xl p-5 max-h-[80%] overflow-y-auto bg-paper">

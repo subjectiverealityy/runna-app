@@ -4,18 +4,18 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { useMockStore } from "@/lib/mock/store";
 
-// REAL IMPLEMENTATION: POST /api/onboarding/orderer — see
-// lib/business/onboarding.ts::createOrdererProfile in the backend-wired
-// app. Here it calls the mock store's finishOrdererOnboarding, which does
+// REAL IMPLEMENTATION: POST /api/onboarding/customer — see
+// lib/business/onboarding.ts::createCustomerProfile in the backend-wired
+// app. Here it calls the mock store's finishCustomerOnboarding, which does
 // the same thing as an in-memory push instead of a database insert.
-export default function OrdererSetupPage() {
+export default function CustomerSetupPage() {
   const router = useRouter();
-  const { finishOrdererOnboarding } = useMockStore();
+  const { finishCustomerOnboarding } = useMockStore();
   const [name, setName] = useState("");
 
   const finish = () => {
     const campusId = sessionStorage.getItem("onboarding_campus") ?? "abuad";
-    finishOrdererOnboarding({ name, campusId });
+    finishCustomerOnboarding({ name, campusId });
     router.push("/search");
   };
 

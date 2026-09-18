@@ -4,7 +4,7 @@
 // here into the backend-wired app later is a data-source swap, not a
 // rewrite.
 
-export type PersonType = "runner" | "orderer" | "admin";
+export type PersonType = "runner" | "customer" | "admin";
 export type RunnerStatus = "online" | "offline";
 export type MessageType = "text" | "system" | "request" | "price";
 export type RequestStatus = "open" | "locked";
@@ -54,7 +54,7 @@ export interface Person {
   selfVendorName: string | null;
   selfVendorLocation: string | null;
 
-  // orderer-only
+  // customer-only
   starredRunnerIds: string[];
   walletBalance: number;
 }
@@ -63,7 +63,7 @@ export interface Message {
   id: string;
   chatId: string;
   type: MessageType;
-  sender: "runner" | "orderer" | "admin" | null;
+  sender: "runner" | "customer" | "admin" | null;
   text: string | null;
   at: number;
 
@@ -90,9 +90,9 @@ export interface Message {
 export interface Chat {
   id: string;
   runnerId: string;
-  ordererId: string;
+  customerId: string;
   unreadForRunner: number;
-  unreadForOrderer: number;
+  unreadForCustomer: number;
   countdownEndsAt: number | null;
   lockedUntil: number | null;
   prefill: { vendorId?: string; destinationId?: string; fulfilmentType?: FulfilmentType } | null;

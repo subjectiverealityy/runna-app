@@ -21,7 +21,7 @@ npm run dev
 
 Open `http://localhost:3000`. You'll land on a sign-in screen that's a
 person picker instead of real Google auth — pick any seeded runner,
-orderer, or the admin account to see their screens, or go through
+customer, or the admin account to see their screens, or go through
 onboarding fresh as a new person. See "What's different from real
 sign-in" below for why this screen only exists in this build.
 

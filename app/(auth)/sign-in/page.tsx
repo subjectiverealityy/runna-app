@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import { ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useMockStore } from "@/lib/mock/store";
-import { MOCK_RUNNERS, MOCK_ORDERERS, MOCK_ADMIN } from "@/lib/mock/data";
+import { MOCK_RUNNERS, MOCK_CUSTOMERS, MOCK_ADMIN } from "@/lib/mock/data";
 
 // REAL IMPLEMENTATION: a single "Sign in with Google" button that starts a
 // real OAuth flow via Supabase Auth — see the backend-wired app's
@@ -52,9 +52,9 @@ export default function SignInPage() {
         ))}
       </div>
 
-      <p className="text-xs font-semibold uppercase tracking-wide mb-2 text-faint">Orderers</p>
+      <p className="text-xs font-semibold uppercase tracking-wide mb-2 text-faint">CUSTOMERs</p>
       <div className="space-y-2 mb-6">
-        {MOCK_ORDERERS.map((o) => (
+        {MOCK_CUSTOMERS.map((o) => (
           <button
             key={o.id}
             onClick={() => pick(o.id, "/search")}

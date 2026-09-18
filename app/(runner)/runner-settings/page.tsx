@@ -82,7 +82,7 @@ export default function RunnerSettingsPage() {
         </div>
         {selfVendorOn && (
           <div className="mt-2 space-y-2">
-            <p className="text-[11px] text-sub">Add your business as a vendor, and where orderers should find you to pick up.</p>
+            <p className="text-[11px] text-sub">Add your business as a vendor, and where customers should find you to pick up.</p>
             <input value={selfVendorName} onChange={(e) => setSelfVendorName(e.target.value)} placeholder="Business name — e.g. Femi's Grill" className="w-full rounded-xl px-3.5 py-3 text-sm border border-line bg-card outline-none" />
             <input value={selfVendorLocation} onChange={(e) => setSelfVendorLocation(e.target.value)} placeholder="Fulfilment location — e.g. Room C103, Female Hostel 4" className="w-full rounded-xl px-3.5 py-3 text-sm border border-line bg-card outline-none" />
           </div>

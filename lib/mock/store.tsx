@@ -13,7 +13,7 @@
 // the original prototype.
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import type { Person, Chat, Message, Report, Feedback, AdminChat, FulfilmentType, PersonType, DeliverTo, Campus, Vendor, Destination } from "@/types/mock";
-import { MOCK_RUNNERS, MOCK_ORDERERS, MOCK_ADMIN, CAMPUSES, VENDORS, DESTINATIONS, seedChats, uid } from "./data";
+import { MOCK_RUNNERS, MOCK_CUSTOMERS, MOCK_ADMIN, CAMPUSES, VENDORS, DESTINATIONS, seedChats, uid } from "./data";
 
 const RESPONSE_WINDOW_MS = 5 * 60 * 1000;
 const LOCK_DURATION_MS = 24 * 60 * 60 * 1000;
@@ -54,7 +54,7 @@ interface Store {
     canDeliver: boolean; canPickup: boolean; deliverTo: DeliverTo[];
     selfVendorName?: string; selfVendorLocation?: string;
   }) => string;
-  finishOrdererOnboarding: (fields: { name: string; campusId: string }) => string;
+  finishCustomerOnboarding: (fields: { name: string; campusId: string }) => string;
 
   // ── runner ────────────────────────────────────────────────────────
   toggleRunnerStatus: () => void;
@@ -74,7 +74,7 @@ interface Store {
   submitFulfilmentCode: (chatId: string, priceId: string, code: string) => boolean;
   sendChatMessage: (chatId: string, text: string) => void;
 
-  // ── orderer extras ────────────────────────────────────────────────
+  // ── customer extras ────────────────────────────────────────────────
   toggleStar: (runnerId: string) => void;
   topUpWallet: (amount: number) => void;
 
@@ -106,7 +106,7 @@ export function useMockStore() {
 
 export function MockStoreProvider({ children }: { children: React.ReactNode }) {
   const [currentPersonId, setCurrentPersonId] = useState<string | null>(null);
-  const [people, setPeople] = useState<Person[]>([...MOCK_RUNNERS, ...MOCK_ORDERERS, MOCK_ADMIN]);
+  const [people, setPeople] = useState<Person[]>([...MOCK_RUNNERS, ...MOCK_CUSTOMERS, MOCK_ADMIN]);
   const [chats, setChats] = useState<Record<string, Chat>>(() => seedChats());
   const [adminReports, setAdminReports] = useState<Report[]>([]);
   const [appFeedback, setAppFeedback] = useState<Feedback[]>([]);
@@ -205,18 +205,18 @@ export function MockStoreProvider({ children }: { children: React.ReactNode }) {
     return id;
   };
 
-  // REAL IMPLEMENTATION: POST /api/onboarding/orderer — see
-  // lib/business/onboarding.ts::createOrdererProfile.
-  const finishOrdererOnboarding: Store["finishOrdererOnboarding"] = (fields) => {
-    const id = "new_orderer_" + uid();
-    const newOrderer: Person = {
-      id, type: "orderer", code: String(100000 + Math.floor(Math.random() * 899999)),
+  // REAL IMPLEMENTATION: POST /api/onboarding/customer — see
+  // lib/business/onboarding.ts::createCustomerProfile.
+  const finishCustomerOnboarding: Store["finishCustomerOnboarding"] = (fields) => {
+    const id = "new_customer_" + uid();
+    const newCustomer: Person = {
+      id, type: "customer", code: String(100000 + Math.floor(Math.random() * 899999)),
       name: fields.name, campusId: fields.campusId,
       vendorIds: [], destinationIds: [], canDeliver: false, canPickup: false, deliverTo: [],
       status: "offline", isBlocked: false, payoutAccount: null, selfVendorName: null, selfVendorLocation: null,
       starredRunnerIds: [], walletBalance: 0,
     };
-    setPeople((prev) => [...prev, newOrderer]);
+    setPeople((prev) => [...prev, newCustomer]);
     setCurrentPersonId(id);
     return id;
   };
@@ -253,18 +253,18 @@ export function MockStoreProvider({ children }: { children: React.ReactNode }) {
   // simultaneous requests both try to create the same chat.
   const findOrCreateChat: Store["findOrCreateChat"] = (runnerId, prefill) => {
     if (!currentPerson) throw new Error("Not signed in.");
-    const existing = Object.values(chats).find((c) => c.runnerId === runnerId && c.ordererId === currentPerson.id);
+    const existing = Object.values(chats).find((c) => c.runnerId === runnerId && c.customerId === currentPerson.id);
     if (existing) return existing.id;
     const id = "chat_" + uid();
-    setChats((prev) => ({ ...prev, [id]: { id, runnerId, ordererId: currentPerson.id, unreadForRunner: 0, unreadForOrderer: 0, countdownEndsAt: null, lockedUntil: null, prefill: prefill ?? null, messages: [] } }));
+    setChats((prev) => ({ ...prev, [id]: { id, runnerId, customerId: currentPerson.id, unreadForRunner: 0, unreadForCustomer: 0, countdownEndsAt: null, lockedUntil: null, prefill: prefill ?? null, messages: [] } }));
     return id;
   };
 
   // ── request / price / fulfilment lifecycle ──────────────────────
   // REAL IMPLEMENTATION: POST /api/requests. Enforces, server-side: the
-  // caller actually owns this chat as its orderer (an ownership check
+  // caller actually owns this chat as its customer (an ownership check
   // found missing in early review — every write function needs this, not
-  // just the ones handling money); a blocked orderer can edit an already-
+  // just the ones handling money); a blocked customer can edit an already-
   // open request but not create a new one; an offline runner can never
   // receive a new request at all (specifically so the countdown never
   // starts against someone who isn't around to respond); and the
@@ -288,7 +288,7 @@ export function MockStoreProvider({ children }: { children: React.ReactNode }) {
       if (isEditingOpen && currentRequest) {
         messages = c.messages.map((m) => (m.id === currentRequest.id ? { ...m, ...fields, note: fields.note ?? "" } : m));
       } else {
-        messages = [...c.messages, blankMessage({ chatId, type: "request", sender: "orderer", ...fields, note: fields.note ?? "", requestStatus: "open" })];
+        messages = [...c.messages, blankMessage({ chatId, type: "request", sender: "customer", ...fields, note: fields.note ?? "", requestStatus: "open" })];
       }
       return { ...prev, [chatId]: { ...c, messages, countdownEndsAt } };
     });
@@ -328,7 +328,7 @@ export function MockStoreProvider({ children }: { children: React.ReactNode }) {
   // REAL IMPLEMENTATION: POST /api/prices/[id]/accept. This is the most
   // important function to get right in the real app — see the "payment
   // bypass" note below. Verifies the caller owns this chat as its
-  // orderer. Debits the wallet only via a concurrency-safe guard (an
+  // customer. Debits the wallet only via a concurrency-safe guard (an
   // unguarded read-then-write here was a real lost-update race found
   // during review). CRITICALLY: a direct (non-wallet) charge must NEVER
   // be confirmed by this route directly — only by the Flutterwave webhook,
@@ -421,7 +421,7 @@ export function MockStoreProvider({ children }: { children: React.ReactNode }) {
     const chat = chats[chatId];
     if (!chat) return;
     if (chat.lockedUntil && chat.lockedUntil > Date.now()) return;
-    const sender = currentPerson.type === "runner" ? "runner" : "orderer";
+    const sender = currentPerson.type === "runner" ? "runner" : "customer";
     setChats((prev) => {
       const c = prev[chatId];
       if (!c) return prev; // defensive — chatId is always valid by the time these run, but this keeps the type honest
@@ -429,18 +429,18 @@ export function MockStoreProvider({ children }: { children: React.ReactNode }) {
         ...prev,
         [chatId]: {
           ...c,
-          unreadForRunner: sender === "orderer" ? c.unreadForRunner + 1 : c.unreadForRunner,
-          unreadForOrderer: sender === "runner" ? c.unreadForOrderer + 1 : c.unreadForOrderer,
+          unreadForRunner: sender === "customer" ? c.unreadForRunner + 1 : c.unreadForRunner,
+          unreadForCustomer: sender === "runner" ? c.unreadForCustomer + 1 : c.unreadForCustomer,
           messages: [...c.messages, blankMessage({ chatId, type: "text", sender, text })],
         },
       };
     });
   };
 
-  // ── orderer extras ───────────────────────────────────────────────
+  // ── customer extras ───────────────────────────────────────────────
   // REAL IMPLEMENTATION: POST /api/starred — self-scoped (always the
   // caller's own array), no ownership check needed beyond "are you signed
-  // in as an orderer."
+  // in as an customer."
   const toggleStar: Store["toggleStar"] = (runnerId) => {
     if (!currentPerson) return;
     setPeople((prev) => prev.map((p) => (p.id === currentPerson.id ? { ...p, starredRunnerIds: p.starredRunnerIds.includes(runnerId) ? p.starredRunnerIds.filter((id) => id !== runnerId) : [...p.starredRunnerIds, runnerId] } : p)));
@@ -572,7 +572,7 @@ export function MockStoreProvider({ children }: { children: React.ReactNode }) {
     () => ({
       currentPersonId, currentPerson, signInAs, signOut,
       people, chats, adminReports, appFeedback, adminChats, campuses, vendors, destinations, now,
-      finishRunnerOnboarding, finishOrdererOnboarding,
+      finishRunnerOnboarding, finishCustomerOnboarding,
       toggleRunnerStatus, updateRunnerProfile,
       findOrCreateChat, submitRequest, rejectRequest, sendPrice, acceptPrice, rejectPrice, cancelPrice, submitFulfilmentCode, sendChatMessage,
       toggleStar, topUpWallet,

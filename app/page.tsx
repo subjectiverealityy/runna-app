@@ -14,7 +14,7 @@ export default function RootPage() {
   useEffect(() => {
     if (!currentPerson) return router.replace("/sign-in");
     if (currentPerson.type === "runner") return router.replace("/orders");
-    if (currentPerson.type === "orderer") return router.replace("/search");
+    if (currentPerson.type === "customer") return router.replace("/search");
     if (currentPerson.type === "admin") return router.replace("/reports");
   }, [currentPerson, router]);
 
