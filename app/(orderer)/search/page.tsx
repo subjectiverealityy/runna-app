@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Star, Settings as SettingsIcon } from "lucide-react";
-import { InfoModal, InfoButton } from "@/components/ui/InfoModal";
+import { Star } from "lucide-react";
+import { InfoModal } from "@/components/ui/InfoModal";
 import { useMockStore } from "@/lib/mock/store";
 import type { Person, FulfilmentType } from "@/types/mock";
 
@@ -18,7 +18,6 @@ export default function SearchPage() {
   const [vendorFilter, setVendorFilter] = useState("");
   const [destinationFilter, setDestinationFilter] = useState("");
   const [fulfilmentFilter, setFulfilmentFilter] = useState<FulfilmentType | "">("");
-  const [showInfo, setShowInfo] = useState(false);
 
   if (!currentPerson) return null;
   const vendors = allVendors.filter((v) => v.campusId === currentPerson.campusId && v.isActive);
@@ -68,15 +67,6 @@ export default function SearchPage() {
 
   return (
     <div className="px-4 py-4 space-y-3 overflow-y-auto h-full">
-      <div className="flex items-center justify-between">
-        <span className="text-sm font-semibold text-navy">Find a runner</span>
-        <div className="flex items-center gap-2">
-          <InfoButton onClick={() => setShowInfo(true)} />
-          <a href="/orderer-settings" className="p-1">
-            <SettingsIcon size={16} className="text-sub" />
-          </a>
-        </div>
-      </div>
       <div className="flex gap-2">
         <button onClick={() => setShowStarredOnly(false)} className={`flex-1 rounded-lg py-2 text-xs font-semibold border border-line ${!showStarredOnly ? "bg-navy text-white" : "bg-card text-sub"}`}>All runners</button>
         <button onClick={() => setShowStarredOnly(true)} className={`flex-1 rounded-lg py-2 text-xs font-semibold border border-line ${showStarredOnly ? "bg-navy text-white" : "bg-card text-sub"}`}>Starred</button>
@@ -126,7 +116,6 @@ export default function SearchPage() {
           </div>
         ))}
       </div>
-      {showInfo && <InfoModal role="orderer" onClose={() => setShowInfo(false)} />}
     </div>
   );
 }
