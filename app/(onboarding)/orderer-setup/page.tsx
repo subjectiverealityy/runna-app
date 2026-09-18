@@ -21,12 +21,12 @@ export default function OrdererSetupPage() {
 
   return (
     <div className="flex-1 flex flex-col px-5 pt-10">
-      <p className="text-xs font-semibold text-sub">Your client code will be assigned once you finish setup.</p>
+      <p className="text-xs font-semibold text-sub">An account ID will be assigned once you finish setup.</p>
       <label className="text-xs font-semibold text-sub mt-8">What's your name?</label>
       <input
         value={name}
         onChange={(e) => setName(e.target.value)}
-        placeholder="e.g. Tolu"
+        placeholder="Your name"
         className="w-full mt-1.5 mb-8 rounded-xl px-3.5 py-3 text-sm border border-line bg-card outline-none"
       />
       <div className="flex-1" />
