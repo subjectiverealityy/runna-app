@@ -2,15 +2,16 @@
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BottomTabs } from "@/components/ui/BottomTabs";
-import { Search, MessageCircle, Settings as SettingsIcon } from "lucide-react";
-import { InfoModal, InfoButton } from "@/components/ui/InfoModal";
+import { Search, MessageCircle } from "lucide-react";
 import { useMockStore } from "@/lib/mock/store";
+import { Header } from "@/components/ui/Header";
+import { InfoModal } from "@/components/ui/InfoModal";
 
 export default function OrdererLayout({ children }: { children: React.ReactNode }) {
-  const [showInfo, setShowInfo] = useState(false);
   const { currentPerson } = useMockStore();
   const pathname = usePathname();
   const router = useRouter();
+  const [showInfo, setShowInfo] = useState(false);
   const inChat = /\/orderer-messages\/[^/]+$/.test(pathname) || pathname === "/orderer-messages/support";
 
   useEffect(() => {
@@ -21,19 +22,7 @@ export default function OrdererLayout({ children }: { children: React.ReactNode 
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex items-center justify-between">
-      {!inChat && (
-        <>
-          <span className="text-sm font-semibold text-navy">Find a runner</span>
-          <div className="flex items-center gap-2">
-            <InfoButton onClick={() => setShowInfo(true)} />
-            <a href="/orderer-settings" className="p-1">
-              <SettingsIcon size={16} className="text-sub" />
-            </a>
-          </div>
-        </>
-      )}
-      </div>
+      {!inChat && <Header title="Runna" onInfo={() => setShowInfo(true)} onSettings={() => router.push("/orderer-settings")} />}
       <div className="flex-1 overflow-hidden">{children}</div>
       {!inChat && (
         <BottomTabs

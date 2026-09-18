@@ -1,8 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Star } from "lucide-react";
-import { InfoModal } from "@/components/ui/InfoModal";
+import { Star, Search as SearchIcon } from "lucide-react";
 import { useMockStore } from "@/lib/mock/store";
 import type { Person, FulfilmentType } from "@/types/mock";
 
@@ -15,6 +14,7 @@ export default function SearchPage() {
   const router = useRouter();
   const { currentPerson, people, toggleStar, findOrCreateChat, vendors: allVendors, destinations: allDestinations } = useMockStore();
   const [showStarredOnly, setShowStarredOnly] = useState(false);
+  const [query, setQuery] = useState("");
   const [vendorFilter, setVendorFilter] = useState("");
   const [destinationFilter, setDestinationFilter] = useState("");
   const [fulfilmentFilter, setFulfilmentFilter] = useState<FulfilmentType | "">("");
@@ -51,6 +51,7 @@ export default function SearchPage() {
 
   const results = runners
     .filter((r) => (showStarredOnly ? currentPerson.starredRunnerIds.includes(r.id) : true))
+    .filter((r) => (query.trim() ? r.code.includes(query.trim().replace(/#/g, "")) : true))
     .filter((r) => (vendorFilter ? r.vendorIds.includes(vendorFilter) : true))
     .filter((r) => (destinationFilter ? r.destinationIds.includes(destinationFilter) : true))
     .filter((r) => supportsFulfilment(r, fulfilmentFilter))
@@ -67,6 +68,15 @@ export default function SearchPage() {
 
   return (
     <div className="px-4 py-4 space-y-3 overflow-y-auto h-full">
+      <div className="flex items-center gap-2 rounded-xl px-3 py-2.5 border border-line bg-card">
+        <SearchIcon size={15} className="text-faint" />
+        <input
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Rider code · #123456"
+          className="flex-1 text-sm outline-none bg-transparent font-mono"
+        />
+      </div>
       <div className="flex gap-2">
         <button onClick={() => setShowStarredOnly(false)} className={`flex-1 rounded-lg py-2 text-xs font-semibold border border-line ${!showStarredOnly ? "bg-navy text-white" : "bg-card text-sub"}`}>All runners</button>
         <button onClick={() => setShowStarredOnly(true)} className={`flex-1 rounded-lg py-2 text-xs font-semibold border border-line ${showStarredOnly ? "bg-navy text-white" : "bg-card text-sub"}`}>Starred</button>

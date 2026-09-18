@@ -3,19 +3,13 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Plus, Send, Clock, MoreVertical } from "lucide-react";
 import { useMockStore } from "@/lib/mock/store";
+import { fulfilmentLabel } from "@/lib/format";
 import { RequestCard } from "./RequestCard";
 import { PriceCard } from "./PriceCard";
 import { RequestModal } from "./RequestModal";
 import { PriceModal } from "./PriceModal";
 import { ReportModal } from "./ReportModal";
 import type { Message, FulfilmentType } from "@/types/mock";
-
-function fulfilmentLabel(type: FulfilmentType | null) {
-  if (type === "delivery-room") return "Delivery to room";
-  if (type === "delivery-front") return "Delivery to hostel front";
-  if (type === "pickup") return "Pickup";
-  return "";
-}
 
 // REAL IMPLEMENTATION: reads come from Supabase directly (with a realtime
 // subscription on the chat's messages), writes go through the API routes
@@ -110,7 +104,7 @@ export function ChatScreen({ chatId, role }: { chatId: string; role: "runner" | 
 
   return (
     <div className="flex flex-col h-full relative">
-      <div className="flex items-center justify-between px-4 py-3 border-b border-line bg-paper relative">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-line bg-paper relative flex-shrink-0">
         <button onClick={() => router.back()} className="p-1 -ml-1">
           <ArrowLeft size={20} className="text-navy" />
         </button>
@@ -202,7 +196,7 @@ export function ChatScreen({ chatId, role }: { chatId: string; role: "runner" | 
         })}
       </div>
 
-      <div className="px-4 pb-5 pt-2 border-t border-line bg-paper">
+      <div className="px-4 pb-5 pt-2 border-t border-line bg-paper flex-shrink-0">
         {chatLocked ? (
           <div className="rounded-xl px-3.5 py-3 text-center bg-redBg">
             <p className="text-xs font-medium text-red">This chat is locked and will reopen automatically.</p>

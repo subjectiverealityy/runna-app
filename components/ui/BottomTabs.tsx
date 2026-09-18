@@ -7,7 +7,7 @@ export function BottomTabs({ tabs }: { tabs: { href: string; label: string; icon
   const router = useRouter();
 
   return (
-    <div className="flex border-t border-line bg-paper">
+    <div className="flex border-t border-line bg-paper flex-shrink-0">
       {tabs.map((t) => {
         const active = pathname.startsWith(t.href);
         return (

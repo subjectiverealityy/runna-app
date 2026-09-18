@@ -4,6 +4,8 @@ import { useEffect } from "react";
 import { BottomTabs } from "@/components/ui/BottomTabs";
 import { AlertCircle, MessageCircle, Settings as SettingsIcon, Search } from "lucide-react";
 import { useMockStore } from "@/lib/mock/store";
+import { Header } from "@/components/ui/Header";
+import { SignOutButton } from "@/components/ui/SignOutButton";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const { currentPerson, adminChats } = useMockStore();
@@ -20,6 +22,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   return (
     <div className="flex flex-col h-full">
+      {!inChat && <Header title="Runna Admin" right={<SignOutButton />} />}
       <div className="flex-1 overflow-hidden">{children}</div>
       {!inChat && (
         <BottomTabs

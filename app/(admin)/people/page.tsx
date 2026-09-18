@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useMockStore } from "@/lib/mock/store";
-import { SignOutButton } from "@/components/ui/SignOutButton";
 
 export default function PeoplePage() {
   const router = useRouter();
@@ -74,9 +73,6 @@ export default function PeoplePage() {
           </div>
         </div>
       )}
-      <div className="pt-2 border-t border-line">
-        <SignOutButton />
-      </div>
     </div>
   );
 }

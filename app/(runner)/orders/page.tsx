@@ -1,8 +1,15 @@
 "use client";
 import { useState } from "react";
-import { Copy, Settings as SettingsIcon } from "lucide-react";
+import { Copy } from "lucide-react";
 import { useMockStore } from "@/lib/mock/store";
-import { InfoModal, InfoButton } from "@/components/ui/InfoModal";
+import { fulfilmentLabel, formatTime12h } from "@/lib/format";
+
+interface OrderRow {
+  price: any;
+  request: any;
+  chat: any;
+  orderer: any;
+}
 
 async function copyToClipboard(text: string): Promise<boolean> {
   try {
@@ -38,7 +45,6 @@ export default function RunnerOrdersPage() {
   const { currentPerson, chats, people, toggleRunnerStatus, vendors, destinations } = useMockStore();
   const [copied, setCopied] = useState(false);
   const [copyFailed, setCopyFailed] = useState(false);
-  const [showInfo, setShowInfo] = useState(false);
 
   if (!currentPerson) return null;
 
@@ -100,10 +106,6 @@ export default function RunnerOrdersPage() {
             </button>
           </div>
           <div className="flex items-center gap-2">
-            <InfoButton onClick={() => setShowInfo(true)} />
-            <a href="/runner-settings" className="p-1">
-              <SettingsIcon size={16} color="#B9C0D1" />
-            </a>
             <button
               onClick={toggleRunnerStatus}
               disabled={currentPerson.status === "offline" && currentPerson.isBlocked}
@@ -127,7 +129,16 @@ export default function RunnerOrdersPage() {
               <span className="text-sm font-semibold text-navy">{resolveVendorName(request?.vendorId ?? null)}</span>
               <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#FDF1DC] text-amberDeep">To deliver</span>
             </div>
-            <p className="text-xs text-sub">{resolveDestinationName(request?.destinationId ?? null)} · {request?.deliveryTime}</p>
+            <p className="text-xs text-sub">
+              {resolveDestinationName(request?.destinationId ?? null)} · {fulfilmentLabel(request?.fulfilmentType ?? null)} · {formatTime12h(request?.deliveryTime)}
+            </p>
+            {price.items && (
+              <p className="text-xs mt-1 text-ink">
+                <span className="font-semibold">Items: </span>
+                {price.items}
+              </p>
+            )}
+            {price.note && <p className="text-xs mt-1 italic text-sub">"{price.note}"</p>}
             <p className="text-xs mt-1 text-ink">For {orderer?.name} · code <span className="font-mono">{price.fulfilmentCode}</span></p>
           </a>
         ))}
@@ -138,12 +149,19 @@ export default function RunnerOrdersPage() {
               <span className="text-sm font-semibold text-navy">{resolveVendorName(request?.vendorId ?? null)}</span>
               <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-greenBg text-green">Delivered</span>
             </div>
-            <p className="text-xs text-sub">{resolveDestinationName(request?.destinationId ?? null)} · {request?.deliveryTime}</p>
+            <p className="text-xs text-sub">
+              {resolveDestinationName(request?.destinationId ?? null)} · {fulfilmentLabel(request?.fulfilmentType ?? null)} · {formatTime12h(request?.deliveryTime)}
+            </p>
+            {price.items && (
+              <p className="text-xs mt-1 text-ink">
+                <span className="font-semibold">Items: </span>
+                {price.items}
+              </p>
+            )}
             <p className="text-xs mt-1 text-ink">For {orderer?.name}</p>
           </a>
         ))}
       </div>
-      {showInfo && <InfoModal role="runner" onClose={() => setShowInfo(false)} />}
     </div>
   );
 }
