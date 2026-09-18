@@ -159,7 +159,8 @@ export default function RunnerOrdersPage() {
                 {price.items}
               </p>
             )}
-            <p className="text-xs mt-1 text-ink">For {orderer?.name}</p>
+            {price.note && <p className="text-xs mt-1 italic text-sub">"{price.note}"</p>}
+            <p className="text-xs mt-1 text-ink">For {orderer?.name} · code <span className="font-mono">{price.fulfilmentCode}</span></p>
           </Link>
         ))}
       </div>
