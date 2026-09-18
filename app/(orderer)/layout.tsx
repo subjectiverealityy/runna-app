@@ -22,13 +22,17 @@ export default function OrdererLayout({ children }: { children: React.ReactNode 
   return (
     <div className="flex flex-col h-full">
       <div className="flex items-center justify-between">
-        <span className="text-sm font-semibold text-navy">Find a runner</span>
-        <div className="flex items-center gap-2">
-          <InfoButton onClick={() => setShowInfo(true)} />
-          <a href="/orderer-settings" className="p-1">
-            <SettingsIcon size={16} className="text-sub" />
-          </a>
-        </div>
+      {!inChat && (
+        <>
+          <span className="text-sm font-semibold text-navy">Find a runner</span>
+          <div className="flex items-center gap-2">
+            <InfoButton onClick={() => setShowInfo(true)} />
+            <a href="/orderer-settings" className="p-1">
+              <SettingsIcon size={16} className="text-sub" />
+            </a>
+          </div>
+        </>
+      )}
       </div>
       <div className="flex-1 overflow-hidden">{children}</div>
       {!inChat && (
