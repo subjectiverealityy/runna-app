@@ -13,7 +13,7 @@ export function FeedbackModal({ onClose }: { onClose: () => void }) {
 
   return (
     <div className="fixed inset-0 z-30 flex items-end justify-center bg-black/40">
-      <div className="w-full max-w-md rounded-t-2xl p-5 bg-paper">
+      <div className="w-full max-w-md mx-auto rounded-t-2xl p-5 bg-paper">
         <div className="flex items-center justify-between mb-4">
           <span className="font-semibold text-base text-navy">Send feedback</span>
           <button onClick={onClose}>

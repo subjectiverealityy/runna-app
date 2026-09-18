@@ -13,8 +13,8 @@ export function ReportModal({ otherName, onClose, onSubmit }: { otherName: strin
   };
 
   return (
-    <div className="absolute inset-0 z-40 flex items-end justify-center bg-black/40">
-      <div className="w-full rounded-t-2xl p-5 bg-paper">
+    <div className="fixed inset-0 z-40 flex items-end justify-center bg-black/40">
+      <div className="w-full max-w-md mx-auto rounded-t-2xl p-5 bg-paper">
         <div className="flex items-center justify-between mb-4">
           <span className="font-semibold text-base text-navy">Report {otherName}</span>
           <button onClick={onClose}>

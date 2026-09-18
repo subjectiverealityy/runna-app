@@ -59,7 +59,7 @@ function AddFundsModal({ onClose, onAdd }: { onClose: () => void; onAdd: (amount
   const [amount, setAmount] = useState("");
   return (
     <div className="fixed inset-0 z-30 flex items-end justify-center bg-black/40">
-      <div className="w-full max-w-md rounded-t-2xl p-5 bg-paper">
+      <div className="w-full max-w-md mx-auto rounded-t-2xl p-5 bg-paper">
         <label className="text-xs font-semibold text-sub">Amount (₦)</label>
         <input value={amount} onChange={(e) => setAmount(e.target.value.replace(/[^0-9]/g, ""))} className="w-full mt-1.5 mb-5 rounded-xl px-3.5 py-3 text-sm border border-line outline-none font-mono" />
         <Button
