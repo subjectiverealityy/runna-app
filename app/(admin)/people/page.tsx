@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useMockStore } from "@/lib/mock/store";
@@ -60,7 +61,7 @@ export default function PeoplePage() {
           {inbox.length === 0 && <p className="text-xs text-faint">No conversations yet.</p>}
           <div className="space-y-2">
             {inbox.map((c) => (
-              <a key={c.id} href={`/people/${c.personId}`} className="w-full text-left rounded-xl p-3.5 border border-line bg-card flex items-start justify-between block">
+              <Link key={c.id} href={`/people/${c.personId}`} className="w-full text-left rounded-xl p-3.5 border border-line bg-card flex items-start justify-between block">
                 <div className="min-w-0">
                   <p className="text-sm font-semibold text-navy">
                     {c.person?.name} <span className="font-mono text-xs font-normal text-faint">#{c.person?.code}</span> <span className="text-xs font-normal text-faint">({c.person?.type})</span>
@@ -68,7 +69,7 @@ export default function PeoplePage() {
                   <p className="text-[11px] text-faint">{campusName(c.person?.campusId ?? null)}</p>
                 </div>
                 {c.unreadForAdmin > 0 && <span className="rounded-full text-[10px] font-bold px-1.5 py-0.5 bg-red text-white">{c.unreadForAdmin}</span>}
-              </a>
+              </Link>
             ))}
           </div>
         </div>
