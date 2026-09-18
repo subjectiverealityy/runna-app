@@ -21,7 +21,7 @@ export default function CampusPage() {
   return (
     <div className="flex-1 flex flex-col px-6 pt-10">
       <h2 className="text-xl font-bold mb-1 text-navy">Select your campus</h2>
-      <p className="text-sm mb-6 text-sub">This decides which vendors and hostels you'll see.</p>
+      <p className="text-sm mb-6 text-sub">This determines the vendors and hostels you'll see.</p>
       <div className="space-y-2.5">
         {campuses.filter((c) => c.isActive).map((c) => (
           <button key={c.id} onClick={() => pick(c.id)} className="w-full flex items-center justify-between rounded-xl px-4 py-4 border border-line bg-card">
