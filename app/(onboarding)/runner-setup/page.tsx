@@ -50,7 +50,7 @@ export default function RunnerSetupPage() {
   return (
     <div className="flex-1 overflow-y-auto px-5 pt-8 pb-4 space-y-6">
       <label className="text-xs font-semibold text-sub">What's your name?</label>
-      <input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Kemi" className="w-full mt-1.5 rounded-xl px-3.5 py-3 text-sm border border-line bg-card outline-none" />
+      <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Your Name" className="w-full mt-1.5 rounded-xl px-3.5 py-3 text-sm border border-line bg-card outline-none" />
 
       <div>
         <p className="text-sm font-semibold mb-2 text-navy">Select the vendors you can take orders for</p>
@@ -64,7 +64,7 @@ export default function RunnerSetupPage() {
         </div>
         {selfVendorOn && (
           <div className="mt-2 space-y-2">
-            <p className="text-[11px] text-sub">Add your business as a vendor, and where orderers should find you to pick up.</p>
+            <p className="text-[11px] text-sub">Add your business as a vendor, and add where your customers will pick up orders.</p>
             <input value={selfVendorName} onChange={(e) => setSelfVendorName(e.target.value)} placeholder="Business name — e.g. Femi's Grill" className="w-full rounded-xl px-3.5 py-3 text-sm border border-line bg-card outline-none" />
             <input value={selfVendorLocation} onChange={(e) => setSelfVendorLocation(e.target.value)} placeholder="Fulfilment location — e.g. Room C103, Female Hostel 4" className="w-full rounded-xl px-3.5 py-3 text-sm border border-line bg-card outline-none" />
           </div>
@@ -86,8 +86,8 @@ export default function RunnerSetupPage() {
           <CheckRow label="Delivery" checked={canDeliver} onToggle={() => setCanDeliver(!canDeliver)} />
           {canDeliver && (
             <div className="pl-4 space-y-2">
-              <CheckRow label="To room" checked={deliverTo.includes("room")} onToggle={() => toggleIn(deliverTo, setDeliverTo, "room")} />
-              <CheckRow label="To hostel front" checked={deliverTo.includes("front")} onToggle={() => toggleIn(deliverTo, setDeliverTo, "front")} />
+              <CheckRow label="To hostel rooms" checked={deliverTo.includes("room")} onToggle={() => toggleIn(deliverTo, setDeliverTo, "room")} />
+              <CheckRow label="To hostel entrances" checked={deliverTo.includes("front")} onToggle={() => toggleIn(deliverTo, setDeliverTo, "front")} />
             </div>
           )}
           <CheckRow label="Pickup" checked={canPickup} onToggle={() => setCanPickup(!canPickup)} />
@@ -96,7 +96,7 @@ export default function RunnerSetupPage() {
 
       <div className="rounded-xl p-3.5 text-xs leading-relaxed bg-amber/10 border border-amber text-amberDeep">
         <span className="font-semibold">Important: </span>
-        you'll only be visible on the marketplace once you switch yourself to Online.
+        You'll only be visible on the marketplace once you switch your status to 'Online'.
       </div>
 
       <div>
